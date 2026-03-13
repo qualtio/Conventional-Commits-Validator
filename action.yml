@@ -1,0 +1,46 @@
+name: 'Conventional Commits Validator'
+description: 'Validates that commit messages follow the Conventional Commits specification (conventionalcommits.org)'
+author: 'Qualtio Soluciones Digitales, SLU'
+
+branding:
+  icon: 'check-circle'
+  color: 'green'
+
+inputs:
+  token:
+    description: 'GitHub token to fetch PR commits'
+    required: false
+    default: ${{ github.token }}
+  fail-on-error:
+    description: 'Fail the action if any commit does not comply'
+    required: false
+    default: 'true'
+  scopes:
+    description: 'Comma-separated list of allowed scopes (leave empty to allow any)'
+    required: false
+    default: ''
+  extra-types:
+    description: 'Comma-separated list of extra allowed types beyond the standard ones'
+    required: false
+    default: ''
+
+outputs:
+  valid:
+    description: 'true if all commits are valid, false otherwise'
+    value: ${{ steps.validate.outputs.valid }}
+  invalid-commits:
+    description: 'List of invalid commit messages'
+    value: ${{ steps.validate.outputs.invalid_commits }}
+
+runs:
+  using: 'composite'
+  steps:
+    - name: Validate commit messages
+      id: validate
+      shell: bash
+      env:
+        FAIL_ON_ERROR: ${{ inputs.fail-on-error }}
+        ALLOWED_SCOPES: ${{ inputs.scopes }}
+        EXTRA_TYPES: ${{ inputs.extra-types }}
+        GITHUB_TOKEN: ${{ inputs.token }}
+      run: bash ${{ github.action_path }}/scripts/validate.sh
