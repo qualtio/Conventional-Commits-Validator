@@ -1,4 +1,4 @@
-name: 'Conventional Commits Validator'
+name: 'Qualtio Conventional Commits Validator'
 description: 'Validates that commit messages follow the Conventional Commits specification (conventionalcommits.org)'
 author: 'Qualtio Soluciones Digitales, SLU'
 
